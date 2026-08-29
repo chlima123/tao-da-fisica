@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Tao da Física — Guia Interativo e Compreensivo (Fritjof Capra)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0E2A33; --navy-2:#163A46; --navy-3:#0A1F26;
+  --lat:#B98A2F; --lat-2:#D4A94E; --lat-dim:#8a6a24;
+  --paper:#F6F4EE; --paper-2:#EFEBE0; --ink:#1E2A2E; --ink-soft:#4A5A5E;
+  --line:#D8D2C2; --line-2:#C9C1AC;
+  --green:#1F7D5C; --red:#A13A52; --amber:#B98A2F;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--lat);color:#fff}
+
+/* ===== TOPBAR ===== */
+.topbar{position:sticky;top:0;z-index:50;background:var(--navy);color:var(--paper);
+  border-bottom:3px solid var(--lat);padding:14px 28px;display:flex;align-items:center;gap:18px}
+.topbar .brand{display:flex;align-items:center;gap:12px;min-width:0}
+.topbar .brand .mark{font-family:var(--serif);font-size:24px;color:var(--lat);font-weight:600;letter-spacing:.5px}
+.topbar .brand .t{font-family:var(--serif);font-size:15px;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .brand .t small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--lat-2);text-transform:uppercase}
+.topbar .spacer{flex:1}
+.topbar .print-btn{background:var(--lat);color:#fff;border:none;padding:8px 16px;border-radius:4px;
+  font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:background .15s}
+.topbar .print-btn:hover{background:var(--lat-2)}
+
+/* ===== LAYOUT ===== */
+.layout{display:flex;min-height:calc(100vh - 60px)}
+.sidebar{width:300px;flex-shrink:0;background:var(--navy-2);color:var(--paper);
+  border-right:1px solid var(--navy-3);position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+.sidebar .s-head{padding:20px 20px 12px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar .s-head .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--lat-2);text-transform:uppercase}
+.sidebar .s-head h2{font-family:var(--serif);font-size:18px;font-weight:600;margin-top:4px}
+.sidebar nav{padding:12px 0}
+.sidebar .nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:none;
+  color:var(--paper);padding:10px 20px;font-family:var(--sans);font-size:13.5px;cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+.sidebar .nav-item:hover{background:rgba(255,255,255,.06)}
+.sidebar .nav-item.active{background:rgba(255,255,255,.1);border-left-color:var(--lat);color:#fff}
+.sidebar .nav-item .num{font-family:var(--mono);font-size:11px;color:var(--lat-2);min-width:24px}
+.sidebar .nav-item .sub{display:block;font-size:10px;color:rgba(255,255,255,.5);font-family:var(--mono);letter-spacing:.5px}
+
+/* ===== MAIN ===== */
+.main{flex:1;min-width:0;padding:0}
+.content{max-width:920px;margin:0 auto;padding:48px 40px 80px}
+
+/* ===== HERO ===== */
+.hero{padding:56px 40px 40px;background:var(--navy);color:var(--paper);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:280px;height:280px;border:1px solid rgba(185,138,47,.25);border-radius:50%}
+.hero::before{content:"";position:absolute;right:20px;top:20px;width:180px;height:180px;border:1px solid rgba(185,138,47,.15);border-radius:50%}
+.hero .inner{max-width:920px;margin:0 auto;position:relative;z-index:1}
+.hero .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--lat-2);text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-family:var(--serif);font-size:clamp(30px,5vw,46px);font-weight:600;line-height:1.1;margin-bottom:14px}
+.hero h1 em{font-style:italic;color:var(--lat-2)}
+.hero .sub{font-size:16px;color:rgba(255,255,255,.8);max-width:760px;margin-bottom:28px;line-height:1.6}
+.hero .meta{display:flex;flex-wrap:wrap;gap:10px}
+.hero .chip{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--paper);
+  border:1px solid rgba(255,255,255,.25);padding:6px 12px;border-radius:3px}
+.hero .chip b{color:var(--lat-2);font-weight:600}
+
+/* ===== SECTION ===== */
+.section{display:none;animation:fadeIn .3s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-head{margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid var(--lat)}
+.sec-head .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--lat);text-transform:uppercase;margin-bottom:8px}
+.sec-head h2{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.15;color:var(--navy)}
+.sec-head p{color:var(--ink-soft);margin-top:8px;font-size:15px}
+
+/* ===== CARDS / BLOCKS ===== */
+.card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:24px;margin-bottom:20px;box-shadow:0 1px 2px rgba(14,42,51,.04)}
+.card h3{font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:12px;color:var(--navy)}
+.card h3 .tag{font-family:var(--mono);font-size:10px;color:var(--lat);letter-spacing:1px;text-transform:uppercase;margin-right:8px}
+.card p{color:var(--ink-soft);font-size:14.5px}
+.card .lead{font-size:15.5px;color:var(--ink);line-height:1.75}
+
+/* ===== CHAPTER ===== */
+.chapter-pager{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;background:#fff;border:1px solid var(--line);padding:10px 18px;border-radius:6px}
+.chapter-pager .pager-btn{background:var(--navy);color:var(--paper);border:none;padding:8px 16px;border-radius:4px;font-family:var(--sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:background .15s}
+.chapter-pager .pager-btn:hover{background:var(--navy-2)}
+.chapter-pager .chapter-pos{font-family:var(--mono);font-size:12px;color:var(--lat);font-weight:600;letter-spacing:1px}
+
+.chapter-hero{background:var(--navy);color:var(--paper);border-radius:8px;padding:32px 34px;margin-bottom:24px;position:relative;overflow:hidden}
+.chapter-hero::before{content:attr(data-num);position:absolute;right:18px;top:-30px;font-family:var(--serif);font-size:140px;font-weight:700;color:rgba(185,138,47,.18);line-height:1;pointer-events:none}
+.chapter-hero .parte{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--lat-2);text-transform:uppercase;margin-bottom:8px}
+.chapter-hero h2{font-family:var(--serif);font-size:26px;font-weight:600;position:relative;z-index:1;color:#fff}
+.chapter-hero .core{margin-top:14px;font-size:15px;color:rgba(255,255,255,.85);line-height:1.75;position:relative;z-index:1;max-width:760px}
+.chapter-hero .core b{color:var(--lat-2);font-weight:600}
+
+.block{margin-bottom:28px}
+.block .b-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--lat);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.block .b-label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.fw-item{background:#fff;border:1px solid var(--line);border-left:3px solid var(--lat);border-radius:4px;padding:18px 20px;margin-bottom:12px}
+.fw-item h4{font-family:var(--serif);font-size:16.5px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.fw-item p{font-size:14px;color:var(--ink-soft);line-height:1.65}
+
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.concept{background:#fff;border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+.concept .term{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.concept .def{font-size:12.5px;color:var(--ink-soft);line-height:1.55}
+
+.takeaway{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:4px;padding:12px 16px;margin-bottom:8px}
+.takeaway .tick{color:var(--green);font-weight:700;font-size:15px;line-height:1.4}
+.takeaway p{font-size:14px;color:var(--ink)}
+
+.anti{display:flex;gap:12px;align-items:flex-start;background:#FDF6F4;border:1px solid #E8C9C4;border-left:3px solid var(--red);border-radius:4px;padding:12px 16px;margin-bottom:8px}
+.anti .warn{color:var(--red);font-weight:700;font-size:15px;line-height:1.4}
+.anti p{font-size:13.5px;color:#6B3A3A}
+
+/* ===== GLOSSARY ===== */
+.gloss-search{position:relative;margin-bottom:20px}
+.gloss-search input{width:100%;padding:14px 18px 14px 44px;border:1px solid var(--line);border-radius:6px;
+  font-family:var(--sans);font-size:15px;background:#fff;color:var(--ink)}
+.gloss-search input:focus{outline:none;border-color:var(--lat);box-shadow:0 0 0 3px rgba(185,138,47,.15)}
+.gloss-search .icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--lat);font-size:18px}
+.gloss-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.gloss-item{background:#fff;border:1px solid var(--line);border-radius:4px;padding:14px 16px;transition:border-color .15s}
+.gloss-item:hover{border-color:var(--lat)}
+.gloss-item .term{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.gloss-item .term .ch{font-family:var(--mono);font-size:9px;color:var(--lat);border:1px solid var(--line-2);padding:1px 6px;border-radius:3px;letter-spacing:1px;white-space:nowrap}
+.gloss-item .def{font-size:12.5px;color:var(--ink-soft);line-height:1.55}
+.gloss-count{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-bottom:12px}
+
+/* ===== TABLES ===== */
+.table-wrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead th{background:var(--navy);color:var(--paper);text-align:left;padding:12px 16px;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;position:sticky;top:0}
+tbody td{padding:12px 16px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:var(--paper-2)}
+tbody tr:hover{background:#F0EDE2}
+td.mono, td .mono{font-family:var(--mono);font-size:11px;color:var(--lat)}
+
+/* ===== TREE (PARALELOS EM 2 COLUNAS) ===== */
+.tree{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.tree-col{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.tree-col .t-head{padding:16px 20px;color:#fff}
+.tree-col.fisica .t-head{background:var(--navy)}
+.tree-col.misticismo .t-head{background:var(--navy-2);border-bottom:2px solid var(--lat)}
+.tree-col .t-head h3{font-family:var(--serif);font-size:18px;font-weight:600}
+.tree-col .t-head p{font-size:11px;opacity:.85;font-family:var(--mono);letter-spacing:.5px;margin-top:2px}
+.tree-col .t-body{padding:18px 20px}
+.tree-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;position:relative}
+.tree-step:not(:last-child)::after{content:"";position:absolute;left:11px;top:26px;bottom:-14px;width:2px;background:var(--line)}
+.tree-step .dot{width:24px;height:24px;border-radius:50%;background:var(--paper-2);border:2px solid var(--lat);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--lat);flex-shrink:0;font-weight:600}
+.tree-step p{font-size:13px;color:var(--ink);line-height:1.55;padding-top:2px}
+
+/* ===== PATTERNS ===== */
+.pattern{background:#fff;border:1px solid var(--line);border-radius:6px;padding:22px 24px;margin-bottom:16px}
+.pattern .p-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.pattern .p-head .p-num{font-family:var(--serif);font-size:20px;color:var(--lat);font-weight:700}
+.pattern .p-head h3{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--navy)}
+.pattern .p-head .ch{font-family:var(--mono);font-size:9px;color:var(--lat);border:1px solid var(--line-2);padding:2px 6px;border-radius:3px;letter-spacing:1px;margin-left:auto}
+.pattern .p-use{font-size:12px;font-family:var(--mono);color:var(--lat);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.pattern p{font-size:14px;color:var(--ink-soft);line-height:1.65;margin-bottom:10px}
+.pattern .p-trade{font-size:13px;color:var(--ink);background:var(--paper-2);border-left:3px solid var(--lat);padding:10px 14px;border-radius:0 4px 4px 0}
+.pattern .p-trade b{color:var(--navy)}
+
+/* ===== FOOTER ===== */
+.footer{margin-top:48px;padding-top:24px;border-top:2px solid var(--lat);font-family:var(--mono);font-size:11px;color:var(--ink-soft);line-height:1.8}
+.footer .rule{color:var(--lat);font-weight:700}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;position:static;height:auto;border-right:none;border-bottom:1px solid var(--navy-3)}
+  .sidebar nav{display:flex;flex-wrap:wrap;gap:4px;padding:10px 12px}
+  .sidebar .nav-item{width:auto;border-left:none;border-bottom:2px solid transparent;padding:8px 12px;border-radius:4px}
+  .sidebar .nav-item.active{border-bottom-color:var(--lat)}
+  .sidebar .nav-item .sub{display:none}
+  .content{padding:32px 20px 60px}
+  .hero{padding:40px 20px 30px}
+  .tree{grid-template-columns:1fr}
+  .topbar{padding:12px 16px}
+  .topbar .brand .t{font-size:13px}
+}
+@media(max-width:520px){
+  .concept-grid,.gloss-list{grid-template-columns:1fr}
+  .topbar .print-btn{display:none}
+}
+
+/* ===== PRINT ===== */
+@media print{
+  @page{size:A4 landscape;margin:12mm}
+  body{background:#fff;color:#000}
+  .topbar,.sidebar,.print-btn,.chapter-pager,.gloss-search{display:none!important}
+  .layout{display:block}
+  .content{max-width:100%;padding:0}
+  .section{display:block!important;page-break-after:always}
+  .card,.fw-item,.concept,.takeaway,.anti,.pattern,.tree-col{box-shadow:none;border-color:#999}
+  .chapter-hero,.tree-col .t-head{background:#fff;color:#000;border:2px solid #000}
+  .chapter-hero h2, .chapter-hero .core, .chapter-hero .parte{color:#000}
+  .chapter-hero::before{color:#ddd}
+  thead th{background:#fff;color:#000;border-bottom:2px solid #000;position:static!important}
+  .table-wrap{max-height:none!important;overflow:visible!important;border:none!important;border-radius:0!important}
+  tr{page-break-inside:avoid}
+  tr:hover td{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="mark">☯</div>
+    <div class="t">O Tao da Física<small>Fritjof Capra · 1975</small></div>
+  </div>
+  <div class="spacer"></div>
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir / PDF</button>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="s-head">
+      <div class="eyebrow">Sumário</div>
+      <h2>Guia Interativo</h2>
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+
+  <main class="main">
+    <!-- HERO -->
+    <div class="hero">
+      <div class="inner">
+        <div class="eyebrow">Guia Compreensivo · Epistemologia e Paralelos</div>
+        <h1>O <em>Tao da Física</em></h1>
+        <p class="sub">Guia interativo e navegável da obra seminal de Fritjof Capra (1975) — uma exploração profunda dos paralelos epistemológicos e ontológicos entre a física moderna (relatividade, mecânica quântica, teoria de campos, bootstrap) e as tradições místicas orientais (hinduísmo, budismo, taoísmo, zen).</p>
+        <div class="meta">
+          <span class="chip"><b>18</b> capítulos</span>
+          <span class="chip"><b>3</b> partes</span>
+          <span class="chip"><b>69</b> termos</span>
+          <span class="chip"><b>12</b> padrões</span>
+          <span class="chip"><b>14</b> regras</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- 1. VISÃO GERAL -->
+      <section class="section" id="sec-overview">
+        <div class="sec-head">
+          <div class="eyebrow">Visão Geral</div>
+          <h2>A Arquitetura da Obra</h2>
+          <p>O paralelo entre a revolução da física contemporânea e a sabedoria milenar do Oriente: a superação do mecanicismo em favor de uma visão de mundo orgânica, holística, dinâmica e inseparável.</p>
+        </div>
+
+        <div class="card">
+          <h3><span class="tag">Tese Central</span>A Convergência entre Física Moderna e Misticismo Oriental</h3>
+          <p class="lead">A física contemporânea — ao dissolver a solidez dos corpos atômicos, relativizar o espaço-tempo e revelar a teia quântica de interdependência com o observador — <b>forçou os cientistas a abandonarem o mecanicismo cartesiano-newtoniano</b>. As teorias mais avançadas da matéria e do cosmos descrevem a realidade exatamente nos mesmos termos em que os mestres do Hinduísmo, Budismo, Taoísmo e Zen a vivenciam há milênios: como uma <b>teia dinâmica de eventos e processos em contínua transformação mútua</b>, sem entidades fundamentais isoladas.</p>
+        </div>
+
+        <div class="block">
+          <div class="b-label">Árvore de Paralelos — Física Moderna vs. Misticismo Oriental</div>
+          <div class="tree">
+            <div class="tree-col fisica">
+              <div class="t-head"><h3>FÍSICA MODERNA</h3><p>relatividade · quântica · campos · bootstrap</p></div>
+              <div class="t-body">
+                <div class="tree-step"><div class="dot">1</div><p><b>Inseparabilidade Quântica:</b> O átomo não é objeto isolado, mas nó de relações na teia cósmica.</p></div>
+                <div class="tree-step"><div class="dot">2</div><p><b>Observador-Participante:</b> A medição não é neutra; a consciência participa na manifestação das propriedades.</p></div>
+                <div class="tree-step"><div class="dot">3</div><p><b>Contínuo Espaço-Tempo:</b> Espaço e tempo formam uma trama quadridimensional flexível e relativa.</p></div>
+                <div class="tree-step"><div class="dot">4</div><p><b>Vácuo Quântico Fértil:</b> O campo é a realidade primária; a matéria são excitações do vazio.</p></div>
+                <div class="tree-step"><div class="dot">5</div><p><b>Teoria do Bootstrap:</b> A matéria subsiste por auto-consistência mútua, sem blocos fundamentais.</p></div>
+              </div>
+            </div>
+            <div class="tree-col misticismo">
+              <div class="t-head"><h3>MISTICISMO ORIENTAL</h3><p>hinduísmo · budismo · taoísmo · zen</p></div>
+              <div class="t-body">
+                <div class="tree-step"><div class="dot">1</div><p><b>Unidade Suprema (Brahman/Tao):</b> A multiplicidade fenomênica repousa sobre uma totalidade una e inseparável.</p></div>
+                <div class="tree-step"><div class="dot">2</div><p><b>Transcendência Sujeito-Objeto:</b> A superação da ilusão de um eu isolado separado do cosmos.</p></div>
+                <div class="tree-step"><div class="dot">3</div><p><b>Eterno Agora (Nunc Stans):</b> Passado, presente e futuro pulsam integrados na consciência meditativa.</p></div>
+                <div class="tree-step"><div class="dot">4</div><p><b>Vacuidade Criativa (Sunyata):</b> A vacuidade fértil de onde brotam todas as formas transitórias.</p></div>
+                <div class="tree-step"><div class="dot">5</div><p><b>Rede de Indra:</b> Cada joia do cosmos reflete e contém todas as outras infinitas joias da teia.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="b-label">Estrutura da Obra (18 Capítulos)</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Capítulo</th><th>Parte</th><th>Frameworks-Chave</th></tr></thead>
+              <tbody id="tbl-estrutura"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. CAPÍTULOS -->
+      <section class="section" id="sec-chapters">
+        <div class="sec-head">
+          <div class="eyebrow">Capítulos</div>
+          <h2>Os 18 Capítulos da Obra</h2>
+          <p>Navegação completa capítulo a capítulo. Ideia central, frameworks conceituais, termos-chave, pontos de retenção e anti-padrões.</p>
+        </div>
+        <div id="chapter-nav" class="chapter-pager"></div>
+        <div id="chapter-view"></div>
+      </section>
+
+      <!-- 3. GLOSSÁRIO -->
+      <section class="section" id="sec-glossary">
+        <div class="sec-head">
+          <div class="eyebrow">Glossário</div>
+          <h2>Conceitos da Física e do Misticismo</h2>
+          <p>Terminologia analítica rigorosa: teorias da física moderna e noções das tradições orientais com o capítulo de referência. Use a busca em tempo real.</p>
+        </div>
+        <div class="gloss-search">
+          <span class="icon">⌕</span>
+          <input type="text" id="gloss-input" placeholder="Buscar termo, conceito ou definição…" aria-label="Buscar no glossário">
+        </div>
+        <div class="gloss-count" id="gloss-count"></div>
+        <div class="gloss-list" id="gloss-list"></div>
+      </section>
+
+      <!-- 4. CHEATSHEET -->
+      <section class="section" id="sec-cheatsheet">
+        <div class="sec-head">
+          <div class="eyebrow">Cheatsheet</div>
+          <h2>Regras, Dualidades e Sinais de Erro</h2>
+          <p>Referência rápida de aplicação: regras de decisão metodológica, dualidades clássicas transcendidas e catálogo de tells &amp; smells mecanicistas.</p>
+        </div>
+
+        <div class="block">
+          <div class="b-label">Regras de Decisão Metodológica e Paralelos</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Situação / Desafio</th><th>Decisão / Modelo</th><th>Fundamento / Por Quê</th><th>Cap.</th></tr></thead>
+              <tbody id="tbl-rules"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="b-label">Dualidades Clássicas Transcendidas</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Dualidade Clássica</th><th>Perspectiva da Física Moderna</th><th>Visão do Misticismo Oriental</th><th>Síntese do Tao</th></tr></thead>
+              <tbody id="tbl-dualidades"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="b-label">Tells &amp; Smells — Sinais de Recaída no Mecanicismo Reducionista</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Sinal / Manifestação</th><th>O que Revela / Risco Epistemológico</th><th>Cap.</th></tr></thead>
+              <tbody id="tbl-tells"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. PADRÕES -->
+      <section class="section" id="sec-patterns">
+        <div class="sec-head">
+          <div class="eyebrow">Padrões de Aplicação</div>
+          <h2>Modelos Mentais e Heurísticas</h2>
+          <p>Estruturas práticas de raciocínio extraídas da obra para aplicação em modelagem conceitual, sistemas complexos e pensamento sistêmico.</p>
+        </div>
+        <div id="patterns-list"></div>
+      </section>
+
+      <div class="footer">
+        <div class="rule">— ☯ —</div>
+        <p>Guia interativo elaborado a partir da obra clássica <b>O Tao da Física: Uma exploração dos paralelos entre a física moderna e o misticismo oriental</b> (Fritjof Capra, 1975).<br>
+        Estrutura: 18 capítulos divididos em 3 partes · Doutrina da Matéria e Consciência Cósmica.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ===== DADOS INJETADOS ===== */
+const CHAPTERS = [{"num": "I", "titulo": "Física Moderna: Um Caminho com um Coração?", "parte": "Parte I · O Caminho da Física", "core": "A física contemporânea transcende a cisão mecanicista cartesiana e se aproxima de uma visão ecológica e mística do mundo — um 'caminho com coração' que integra o intelecto rigoroso à sabedoria intuitiva, superando a alienação do homem em relação à natureza.", "frameworks": [["A Cisão Cartesiana (Res Cogitans vs. Res Extensa)", "René Descartes dividiu a realidade entre mente pensante (sujeito) e matéria mecânica extensa (objeto). Essa cisão possibilitou o avanço da física clássica, mas gerou uma visão de mundo fragmentada e destrutiva que a física quântica e relativista agora desconstroem."], ["O Caminho com um Coração", "Inspirado na sabedoria xamânica e nas tradições orientais, Capra propõe que a ciência não pode ser meramente um exercício analítico desvinculado de valores humanos. Uma disciplina intelectual autêntica deve conduzir à integridade espiritual e à comunhão com a totalidade cósmica."], ["Convergência Epistemológica", "Física e misticismo operam com métodos distintos (empírico-matemático vs. intuitivo-meditativo), mas convergem nas suas conclusões sobre a natureza da realidade: ambas descrevem um cosmos dinâmico, interconectado e indivisível."]], "conceitos": [["Mecanicismo Clássico", "A concepção do universo como uma máquina perfeita composta de engrenagens determinísticas e corpos materiais sólidos."], ["Visão Orgânica do Mundo", "A percepção de que o universo funciona como um organismo vivo, onde as partes só adquirem sentido a partir da dinâmica do todo."], ["Crise Paradigmática", "O esgotamento dos modelos mecanicistas diante dos novos fenômenos atômicos e das crises ecológicas globais."], ["Integração Razão-Intuição", "O equilíbrio necessário entre a análise quantitativa racional (Yang) e a síntese intuitiva contemplativa (Yin)."]], "takeaways": ["A física subatômica destruiu os alicerces do mecanicismo cartesiano-newtoniano.", "O progresso tecnológico desprovido de sabedoria ecológica ameaça a sobrevivência planetária.", "A física moderna oferece uma base científica para a espiritualidade cósmica oriental.", "A realidade última não pode ser apreendida exclusivamente por fórmulas matemáticas ou dogmas."], "anti": ["Cientificismo Reducionista: Afirmar que apenas o mensurável e quantificável é real, desdenhando a experiência qualitativa e a consciência intuitiva.", "Anticientificismo Ingênuo: Rejeitar a metodologia científica rigorosa em prol de um misticismo vago e descompromissado com a verdade empírica."]}, {"num": "II", "titulo": "Saber e Ver", "parte": "Parte I · O Caminho da Física", "core": "O conhecimento racional opera por conceitos, abstrações e modelos matemáticos representacionais (mapas), enquanto o conhecimento intuitivo atinge a experiência direta e não mediada da realidade (o território). Toda formulação científica é um mapa necessariamente aproximado.", "frameworks": [["Mapa vs. Território", "Nenhum conceito, palavra ou equação é a própria realidade; são representações simbólicas e simplificadas. Confundir o modelo com o fenômeno em si é a raiz da ilusão intelectual."], ["Conhecimento Racional vs. Intuitivo", "O conhecimento racional é linear, discriminativo, analítico e discursivo. O conhecimento intuitivo (experiência mística direta) é holístico, instantâneo, não-verbal e sintetizador."], ["Aproximação Relativa da Ciência", "A física teórica constrói modelos matemáticos que isolam certos parâmetros observáveis, reconhecendo que nunca pode capturar a totalidade inesgotável da teia cósmica."]], "conceitos": [["Maya Conceitual", "A rede de categorias verbais e mentais que o intelecto sobrepõe ao fluxo vivo do cosmos, tomando a separação como real."], ["Abstração Científica", "O ato deliberado de isolar certas variáveis de um fenômeno para permitir sua formulação matemática."], ["Experiência Direta (Darshana)", "A visão direta e contemplativa da realidade, livre das distorções da mente discursiva."], ["Modelo Teórico", "Estrutura axiomática aproximada que mapeia padrões observáveis sem esgotar a substância do real."]], "takeaways": ["Os conceitos científicos são aproximações úteis, nunca verdades absolutas imutáveis.", "A experiência mística direta transcende a linguagem discursiva e os sistemas conceituais.", "Físicos e místicos utilizam métodos refinados de observação em seus respectivos domínios (laboratório vs. meditação).", "A sabedoria consiste em usar o mapa sem esquecer a vastidão do território."], "anti": ["Reificação de Modelos: Tratar equações matemáticas e categorias conceituais como objetos concretos existentes no mundo real.", "Desprezo pelo Rigor: Achar que a intuição dispensa a disciplina metodológica e o teste empírico na investigação do mundo físico."]}, {"num": "III", "titulo": "Além da Linguagem", "parte": "Parte I · O Caminho da Física", "core": "No domínio atômico e subatômico, a linguagem cotidiana — concebida para o mundo macroscópico tridimensional — falha inevitavelmente. Físicos e místicos recorrem a paradoxos para expressar uma realidade que transcende a lógica formal clássica.", "frameworks": [["O Paradoxo como Ferramenta Heurística", "Quando a lógica aristotélica quebra, o paradoxo não sinaliza um erro de pensamento, mas indica que a mente atingiu os limites de seus modelos conceituais convencionais."], ["Koans Zen e Paradoxos Quânticos", "Tanto os mestres zen com seus koans quanto os físicos com os paradoxos quânticos (como a dualidade onda-partícula) forçam o intelecto a um salto epistemológico além da lógica binária."], ["Incomensurabilidade da Linguagem Ordinária", "As palavras da linguagem comum implicam objetos isolados e eventos lineares no espaço-tempo, sendo incapazes de descrever a natureza probabilística e não-local do átomo."]], "conceitos": [["Koan", "Declaração ou pergunta paradoxal no Zen usada para romper o apego ao raciocínio lógico-discursivo."], ["Dualidade Quântica", "A manifestação aparentemente contraditória de uma mesma entidade como onda contínua ou partícula discreta."], ["Colapso da Lógica Binária", "A inadequação do princípio do terceiro excluído ao mundo subatômico."], ["Metáfora e Mito", "Recursos simbólicos empregados para apontar realidades que excedem as possibilidades de definição literal."]], "takeaways": ["A física quântica e o misticismo operam em regiões da realidade onde a linguagem verbal clássica perde a aplicabilidade estrita.", "Os paradoxos quânticos não são falhas da teoria, mas reflexos da natureza profunda e interconectada da matéria.", "A experiência direta da luz e da matéria exige uma atitude mental flexível e não-dogmática.", "O silêncio meditativo e a matemática abstrata são respostas à insuficiência das palavras comuns."], "anti": ["Literalismo Rígido: Exigir que todos os fenômenos da natureza se conformem ao senso comum e à linguagem do dia a dia.", "Mistificação Obscurantista: Usar o paradoxo como artifício retórico para fugir da clareza e da responsabilidade conceitual."]}, {"num": "IV", "titulo": "A Nova Física", "parte": "Parte I · O Caminho da Física", "core": "A transição revolucionária da física clássica mecanicista (Newton, espaço e tempo absolutos, determinismo estrito) para a física moderna: a Teoria da Relatividade de Einstein e a Mecânica Quântica de Planck, Bohr, Heisenberg e Schrödinger.", "frameworks": [["Mecanicismo Newtoniano vs. Revolução Contemporânea", "O paradigma newtoniano tratava o cosmos como um mecanismo de relógio com partículas sólidas e forças deterministas. A relatividade e a teoria quântica dissolveram essa solidez mecânica."], ["O Contínuo Espaço-Tempo Relativístico", "Einstein demonstrou que espaço e tempo não são absolutos nem separados, mas formam um contínuo dinâmico de quatro dimensões moldado pela matéria e gravidade."], ["O Princípio da Incerteza de Heisenberg", "É impossível determinar simultaneamente com precisão absoluta a posição e o momento de uma partícula subatômica (Δx · Δp ≥ ℏ/2), demonstrando a natureza probabilística fundamental da matéria."]], "conceitos": [["Espaço e Tempo Absolutos", "Conceitos da física newtoniana que postulavam um palco rígido e um relógio universal neutro."], ["Quanta de Ação (Planck)", "A descoberta de que a energia é emitida e absorvida em pacotes discretos indivisíveis (quanta)."], ["Função de Onda (Ψ)", "Expressão matemática que descreve as ondas de probabilidade associadas a uma partícula."], ["Relatividade da Simultaneidade", "A constatação de que eventos simultâneos para um observador podem ocorrer em tempos diferentes para outro em movimento relativo."]], "takeaways": ["A matéria no nível atômico não existe com certeza em lugares definidos, mas exibe 'tendências a existir'.", "O espaço e o tempo tornaram-se grandezas dinâmicas e contextuais.", "O átomo clássico, sólido e impenetrável, revelou-se um vasto vazio permeado por campos energéticos e probabilidades.", "A física quântica e a relatividade exigiram uma revisão completa das categorias ontológicas ocidentais."], "anti": ["Determinismo Mecanicista: Acreditar que o conhecimento das condições iniciais permite prever o futuro do universo com precisão infinita.", "Ilusão do Observador Neutro: Tratar o experimentador como um espectador externo desvinculado do sistema observado."]}, {"num": "V", "titulo": "O Hinduísmo", "parte": "Parte II · O Caminho do Misticismo Oriental", "core": "A visão védica e dos Upanishads da unidade cósmica essencial: Brahman como a realidade última indiferenciada e atemporal, Maya como a ilusão da multiplicidade e das formas transitórias, Lila como o jogo divino criador, e Shiva Nataraja como o dançarino cósmico perpétuo.", "frameworks": [["Brahman e Atman (Identidade Suprema)", "A realidade cósmica última e infinita (Brahman) é idêntica à essência mais profunda da consciência individual (Atman) — expressa no axioma védico Tat Tvam Asi ('Tu és isso')."], ["Maya e a Ilusão da Separatividade", "O mundo fenomênico da multiplicidade é Maya: uma ilusão dinâmica e mágica onde formas transitórias parecem entidades separadas e permanentes."], ["Lila e a Dança Cósmica de Shiva", "A criação não é um ato de fabricação mecânica, mas um jogo divino espontâneo (Lila) e uma dança cósmica incessante de criação, preservação e dissolução encarnada por Shiva Nataraja."]], "conceitos": [["Brahman", "A realidade última, infinita, inefável e onipresente que sustenta todos os mundos e formas."], ["Maya", "A ilusão criadora que vela a unidade cósmica e engendra a aparência de multiplicidade e fragmentação."], ["Karma", "A lei dinâmica de causa e efeito moral e físico que rege a cadeia das ações e reações no cosmos."], ["Moksha", "A libertação espiritual alcançada pelo despertar da consciência para a unidade com Brahman."], ["Samsara", "O ciclo contínuo de nascimentos, mortes e renascimentos no mundo condicionado."]], "takeaways": ["Todos os deuses e formas do panteão hindu são manifestações arquetípicas da única realidade de Brahman.", "A matéria é concebida como energia viva em contínua transmutação rítmica.", "A ignorância (Avidya) consiste em tomar as ilusões de Maya como realidades permanentes e isoladas.", "O universo é uma dança dinâmica de energia em eterna renovação."], "anti": ["Politeísmo Literal: Interpretar as divindades hindus como entidades mitológicas isoladas em vez de aspectos simbólicos de Brahman.", "Fatalismo Inerte: Reduzir o Karma a um determinismo cego e punitivo, desconsiderando seu caráter de lei cósmica de equilíbrio e evolução."]}, {"num": "VI", "titulo": "O Budismo", "parte": "Parte II · O Caminho do Misticismo Oriental", "core": "A doutrina de Siddhartha Gautama fundada na impermanência universal (Anitya), na inexistência de um eu fixo (Anatta), na origem interdependente de todos os fenômenos (Pratityasamutpada) e na superação do sofrimento (Dukkha) pelo Nirvana.", "frameworks": [["As Quatro Nobres Verdades", "O diagnóstico existencial budista: a dor e a insatisfação (Dukkha), sua origem no apego às formas passageiras (Samudaya), a cessação do sofrimento (Nirodha) e o Nobre Caminho Óctuplo de libertação (Magga)."], ["Pratītyasamutpāda (Origem Co-dependente)", "Nenhum fenômeno existe de forma isolada, permanente ou autônoma; todas as coisas e eventos surgem e subsistem em mútua interdependência causal e cósmica."], ["Sunyata (Vacuidade) e Tathata (Talidade)", "As coisas são vazias de substância intrínseca e independente (Sunyata), manifestando-se em sua pura talidade irrepetível ('tal como é', Tathata)."]], "conceitos": [["Anitya (Impermanência)", "A verdade fundamental de que todas as coisas condicionadas estão em perpétuo fluxo e transformação."], ["Anatta (Não-Eu)", "A doutrina de que não existe uma alma substancial, imutável ou separada habitando o ser humano."], ["Dukkha", "A angústia e o atrito existencial provocados pela tentativa ilusória de reter o impermanente."], ["Nirvana", "O estado incondicionado de extinção das ilusões do ego, caracterizado por serenidade e liberdade absoluta."], ["Dharmas", "As unidades elementares de eventos e processos momentâneos que compõem a corrente da experiência."]], "takeaways": ["O Budismo é uma ontologia de processos, fluxos e relações, radicalmente não-substancialista.", "A fixação psicológica em um 'eu' permanente é a causa primordial de todo o sofrimento humano.", "Vacuidade não significa o nada niilista, mas a ausência de existência estática e separada.", "A iluminação budista é a percepção viva da teia de origens interdependentes."], "anti": ["Niilismo Destrutivo: Confundir Sunyata (vacuidade de essência independente) com vazio cósmico estéril ou desespero ontológico.", "Apego à Balsa Doutrinária: Tratar os ensinamentos e regras budistas como dogmas sacrossantos em vez de instrumentos práticos de libertação."]}, {"num": "VII", "titulo": "O Pensamento Chinês", "parte": "Parte II · O Caminho do Misticismo Oriental", "core": "A cosmologia tradicional chinesa centrada na polaridade dinâmica de Yin e Yang, no fluxo ininterrupto de transformação cósmica e no I Ching (Livro das Mutações) como um mapa arquetípico dos padrões de mutação da natureza.", "frameworks": [["A Dialética Polar de Yin e Yang", "Duas forças polares, interdependentes e complementares cuja alternância rítmica e cíclica gera todas as manifestações do universo físico e mental."], ["O I Ching como Álgebra das Mutações", "O sistema de 64 hexagramas que mapeia todas as configurações arquetípicas possíveis de transição entre repouso e movimento, sombra e luz, retração e expansão."], ["A Harmonia Orgânica Natural", "O cosmos como um organismo autoregulado que busca espontaneamente o equilíbrio dinâmico, sem necessidade de um legislador externo impondo mandamentos rígidos."]], "conceitos": [["Yin", "O princípio receptivo, feminino, escuro, flexível, frio, intuitivo e contrativo da realidade."], ["Yang", "O princípio ativo, masculino, luminoso, firme, quente, racional e expansivo da existência."], ["Chi (Qi)", "A energia vital cósmica e o sopro sutil que preenche e anima todos os seres e espaços."], ["Hexagramas do I Ching", "Figuras compostas por seis linhas contínuas (Yang) ou quebradas (Yin) representando estágios de mutação."]], "takeaways": ["O pensamento chinês não busca essências estáticas, mas investiga ritmos de transformação perpétua.", "Os polos opostos não são inimigos em combate, mas parceiros inseparáveis em uma dança rítmica.", "O excesso de qualquer polo gera inevitavelmente a sua transformação no polo oposto.", "A sabedoria consiste em reconhecer o momento oportuno de transição e fluir com ele."], "anti": ["Dualismo Maniqueísta: Interpretar Yin e Yang como uma batalha moral entre Bem e Mal, quando na verdade são complementares.", "Obsessão pelo Crescimento Unilateral: Promover a hipertrofia do Yang (ação febril, exploração) provocando o colapso do sistema."]}, {"num": "VIII", "titulo": "O Taoísmo", "parte": "Parte II · O Caminho do Misticismo Oriental", "core": "Os ensinamentos dos mestres Lao Tsé e Chuang Tsé sobre o Tao (o Caminho inefável e a ordem imanente da natureza) e a prática libertadora do Wu Wei (a ação espontânea e desprovida de esforço artificial em sintonia com o cosmos).", "frameworks": [["O Tao Inefável e Cósmico", "O Tao que pode ser descrito não é o Tao eterno; trata-se da ordem imanente e do processo cósmico unificador de onde tudo brota e para onde tudo retorna."], ["Wu Wei (A Ação Não-Forçada)", "A arte de agir sem esforço voluntarista egoico, alinhando-se aos vetores de força e às dinâmicas naturais dos sistemas, assim como a água contorna as pedras."], ["A Sabedoria e o Poder da Água", "A água é o supremo símbolo taoísta: infinitamente suave, humilde e flexível, mas capaz de desgastar as rochas mais duras e dar vida a todas as coisas sem competir."]], "conceitos": [["Tao", "O princípio e fluxo cósmico supremo, matriz e movimento de tudo o que existe."], ["Wu Wei", "A não-ação artificial; agir em perfeita conformidade com o ritmo espontâneo da natureza."], ["Te", "A virtude, potência interior e eficácia manifesta de um ser que vive em harmonia com o Tao."], ["Tzu-jan", "A espontaneidade natural e auto-geração inerente ao cosmos."]], "takeaways": ["A rigidez e a obstinação conduzem à morte; a flexibilidade e a humildade preservam a vida.", "A tentativa de dominar e manipular a natureza pela força bruta sempre gera desequilíbrio e ruína.", "O sábio taoísta lidera pela presença silenciosa e pela observação sensível do fluxo dos acontecimentos.", "A ordem natural é autorregulada e não necessita de coerção externa para florescer."], "anti": ["Ativismo Coercitivo: Tentar forçar resultados por intervenções violentas e artificiais que violam a dinâmica do sistema.", "Inércia Apatética: Confundir Wu Wei com passividade negligente, paralisia ou covardia perante a ação necessária."]}, {"num": "IX", "titulo": "O Zen", "parte": "Parte II · O Caminho do Misticismo Oriental", "core": "A síntese singular do budismo indiano e do pragmatismo chinês: o Zen busca a experiência direta, imediata e intuitiva da iluminação (Satori) na simplicidade da vida diária, dispensando a especulação metafísica e a devoção a textos sagrados.", "frameworks": [["Satori (Despertar Repentino)", "A iluminação súbita que rompe as barreiras do ego e revela a identidade essencial entre o indivíduo e a totalidade cósmica."], ["A Mente Cotidiana é o Próprio Tao", "A realização espiritual não requer retiros místicos etéreos; ela se manifesta com plenitude no ato de cozinhar, caminhar, respirar e trabalhar com atenção plena."], ["Transmissão Direta Além das Palavras", "O ensinamento essencial é transmitido de mente a mente, sem intermediários verbais ou dogmas rígidos, apontando diretamente para a natureza da realidade."]], "conceitos": [["Satori", "O lampejo de iluminação intuitiva que transforma radicalmente a visão de mundo do praticante."], ["Zazen", "A meditação sentada, onde o corpo e a mente repousam na pura presença silenciosa sem objetivo de ganho."], ["Mondo", "Diálogo rápido e cortante entre mestre e discípulo para provocar o colapso do raciocínio discursivo."], ["Kensho", "O vislumbre inicial da própria natureza de Buda inerente a todo ser humano no Zen."]], "takeaways": ["O Zen elimina o abismo entre o sagrado e o profano: cada momento presente é a realidade última.", "A mente pura é como um espelho limpo: reflete tudo sem reter nada.", "A iluminação não adiciona nada de novo, apenas remove as camadas de ilusão e apego conceituais.", "A prática requer disciplina rigorosa e espontaneidade absoluta simultaneamente."], "anti": ["Intelectualismo Estéril: Debater exaustivamente sutras e paradoxos zen sem jamais sentar em meditação e praticar a presença.", "Esoterismo Fantasioso: Procurar estados alterados de consciência espetaculares, desdenhando as tarefas simples e concretas do cotidiano."]}, {"num": "X", "titulo": "A Unidade de Todas as Coisas", "parte": "Parte III · Os Paralelos", "core": "O tema unificador primordial: a física quântica e o misticismo oriental convergem na percepção de que o universo é uma teia indivisível de relações dinâmicas, onde o observador é parte integrante e ativa da manifestação dos fenômenos.", "frameworks": [["A Teia Quântica Universal", "No nível subatômico, entidades isoladas são ficções conceituais; o universo é uma rede contínua e indivisível de conexões dinâmicas onde tudo se inter-relaciona."], ["O Observador-Participante (John Wheeler)", "A física quântica aboliu o observador impassível. Para medir um elétron, o físico deve interagir com ele; o experimentador participa ativamente na determinação das propriedades observadas."], ["Inseparabilidade Quântica e Não-Localidade", "Sistemas quânticos correlacionados (EPR / Emaranhamento) comportam-se como um todo unificado, independentemente da distância espacial que os separe."]], "conceitos": [["Teia Cósmica", "A trama ontológica de interdependência mútua que conecta todas as partículas e forças do cosmos."], ["Participação Quântica", "O papel constituinte do arranjo experimental e da consciência na manifestação dos estados físicos."], ["Holismo Quântico", "A propriedade segundo a qual as características do sistema global não derivam da simples soma de partes isoladas."], ["Não-Localidade", "A capacidade de eventos quânticos distantes influenciarem-se mutuamente de forma instantânea sem transmissão clássica de sinal."]], "takeaways": ["A separação estrita entre sujeito observador e objeto observado é insustentável na física contemporânea.", "Propriedades atômicas só adquirem definição em relação a um contexto experimental específico.", "O misticismo oriental e a mecânica quântica compartilham a visão do universo como um todo orgânico e inseparável.", "A fragmentação do mundo em objetos independentes é uma ilusão derivada da limitação sensorial e linguística."], "anti": ["Objetivismo Mecanicista: Supor que os corpos subatômicos possuem atributos predefinidos e imutáveis independentemente de qualquer interação.", "Solipsismo Idealista: Afirmar levianamente que a consciência humana cria a matéria física a partir do nada, distorcendo o caráter relacional da física quântica."]}, {"num": "XI", "titulo": "Para Além do Mundo dos Opostos", "parte": "Parte III · Os Paralelos", "core": "A transcendência das dicotomias clássicas: a dualidade onda-partícula na física subatômica e o Princípio da Complementaridade de Niels Bohr espelham a reconciliação oriental dos pares de opostos (Yin-Yang, ser e não-ser, contínuo e descontínuo).", "frameworks": [["Princípio da Complementaridade (Niels Bohr)", "Descrições aparentemente contraditórias e excludentes (como onda contínua e partícula pontual) são ambas indispensáveis para fornecer uma caracterização exaustiva do fenômeno atômico."], ["Contraria Sunt Complementa", "O lema adotado por Bohr em seu brasão pessoal, acompanhado pelo símbolo do Yin-Yang, consagrando a superação da lógica dualista na física quântica."], ["A Transcendência dos Opostos no Misticismo", "Místicos orientais sempre afirmaram que os pares de opostos são polaridades interdependentes de uma mesma realidade subjacente indivisível."]], "conceitos": [["Dualidade Onda-Partícula", "O comportamento híbrido da matéria e da radiação, que exibem aspectos contínuos ou discretos conforme o contexto da medição."], ["Complementaridade", "O arcabouço epistemológico que une conceitos mutuamente exclusivos sob uma perspectiva de totalidade."], ["Lógica Não-Aristotélica", "Estruturas de pensamento que admitem a coexistência e síntese de proposições contrárias."], ["Polaridade Dinâmica", "A relação mútua onde cada polo depende ontologicamente de seu oposto para existir e adquirir sentido."]], "takeaways": ["A matéria não é puramente partícula nem puramente onda, mas transcende ambas as imagens clássicas.", "O rigor científico contemporâneo exige a capacidade de operar com perspectivas complementares.", "A polaridade é um princípio estruturante tanto da natureza física quanto da sabedoria espiritual.", "Rejeitar o pensamento binário rígido é indispensável para compreender a dinâmica subatômica."], "anti": ["Monismo Reducionista: Insistir em reduzir a luz ou a matéria a apenas uma de suas manifestações (apenas onda ou apenas partícula).", "Relativismo Inconsequente: Usar a complementaridade como desculpa para aceitar qualquer contradição arbitrária sem fundamentação rigorosa."]}, {"num": "XII", "titulo": "O Espaço-Tempo", "parte": "Parte III · Os Paralelos", "core": "A Teoria da Relatividade de Einstein unifica o espaço tridimensional e o tempo unidimensional em um contínuo quadridimensional dinâmico (espaço-tempo de Minkowski), em perfeita sintonia com a experiência mística onde o tempo linear se dissolve em um eterno presente dinâmico.", "frameworks": [["O Contínuo Quadridimensional", "Espaço e tempo não são entidades estáticas e independentes, mas dimensões intrinsecamente entrelaçadas numa métrica dinâmica quadridimensional."], ["A Relatividade da Duração e da Simultaneidade", "O ritmo do tempo e as distâncias espaciais variam de acordo com o estado de movimento relativo e o campo gravitacional, demolindo o conceito de um relógio cósmico absoluto."], ["A Visão Mística do Tempo Atemporal", "Estados profundos de meditação revelam a coexistência do fluxo temporal com a atemporalidade, onde passado, presente e futuro pulsam integrados na consciência."]], "conceitos": [["Espaço-Tempo de Minkowski", "A formulação geométrica unificada de quatro dimensões que fundamenta a relatividade especial."], ["Dilatação Temporal", "O efeito relativístico comprovado experimentalmente pelo qual o tempo transcorre mais lentamente para corpos em alta velocidade."], ["Geometria Não-Euclidiana", "A curvatura do espaço-tempo provocada pela distribuição de massa e energia no cosmos."], ["Eterno Agora", "A percepção intuitiva e mística da realidade atemporal que subjaz à passagem sequencial do tempo."]], "takeaways": ["Não existe um espaço vazio absoluto nem um tempo linear universal desvinculados dos corpos físicos.", "A geometria do espaço e a marcha do tempo são propriedades emergentes da dinâmica gravitacional da matéria.", "O misticismo oriental antecipou a relatividade ao descrever o tempo como uma construção da mente humana.", "Na física relativística, a matéria é indissociável de sua trajetória temporal no espaço-tempo."], "anti": ["Concepção Mecanicista do Tempo: Tratar o tempo como um rio uniforme e independente que flui do passado para o futuro fora da matéria.", "Separação Espaço-Tempo: Analisar estruturas espaciais isoladas ignorando sua evolução e deformação temporal necessária."]}, {"num": "XIII", "titulo": "O Universo Dinâmico", "parte": "Parte III · Os Paralelos", "core": "A física moderna revela que a matéria é intrinsecamente dinâmica: o repouso é uma ilusão macroscópica; no nível subatômico, tudo é vibração perpétua, pulsação energética e movimento contínuo, espelhando a ontologia oriental de um cosmos em perpétuo devir.", "frameworks": [["A Inquietação Fundamental da Matéria", "Pelo Princípio da Incerteza, confinar uma partícula subatômica em um volume reduzido aumenta drasticamente seu momento e energia cinética, impedindo o repouso absoluto."], ["Equivalência Massa-Energia (E = mc²)", "A massa de um corpo é uma concentração localizada de energia; partículas subatômicas não são corpos passivos, mas pacotes dinâmicos de energia pura."], ["Primazia do Processo sobre a Estrutura", "As estruturas materiais observadas na natureza são apenas equilíbrios dinâmicos e temporários de processos contínuos de transformação subjacente."]], "conceitos": [["Energia de Ponto Zero", "A energia vibratória mínima que persiste em qualquer sistema quântico mesmo no zero absoluto de temperatura."], ["Equivalência Massa-Energia", "A célebre descoberta de Einstein de que matéria e energia são formas intercambiáveis da mesma substância cósmica."], ["Ontologia de Processos", "A perspectiva filosófica que estabelece o devir e a transformação como a realidade primária do universo."], ["Oscilação Subatômica", "A pulsação vibratória incessante dos constituintes atômicos e dos campos de força."]], "takeaways": ["A matéria subatômica não possui movimento; ela é puro movimento e atividade energética concentrada.", "A solidez dos objetos macroscópicos decorre da velocidade vertiginosa e da atividade contínua dos elétrons e núcleos.", "Física moderna e filosofias orientais convergem na afirmação de que a estabilidade é fruto do equilíbrio dinâmico.", "O universo é uma rede viva de processos e metamorfoses incessantes."], "anti": ["Materialismo Estático: Imaginar partículas como minúsculas esferas de matéria sólida e inerte repousando no espaço.", "Dicotomia Massa-Energia: Considerar matéria e energia como duas substâncias metafisicamente distintas e incomunicáveis."]}, {"num": "XIV", "titulo": "Vazio e Forma", "parte": "Parte III · Os Paralelos", "core": "A Teoria Quântica de Campos unifica matéria e força: o vácuo quântico não é o nada estéril, mas um vazio fértil e dinâmico que gera e reabsorve partículas continuamente — a correspondência exata do Sunyata budista ('A forma é vazio, o vazio é forma').", "frameworks": [["A Teoria Quântica de Campos", "O campo quântico é a entidade ontológica primária; as partículas materiais são excitações localizadas, transitórias e descontínuas do campo contínuo contíguo."], ["O Vácuo Quântico Dinâmico", "O vácuo na física moderna não é ausência de ser, mas o estado fundamental de energia mínima, repleto de flutuações quânticas e nascimento de partículas virtuais."], ["A Identidade entre Vazio e Forma (Sunyata)", "A sabedoria do Sutra do Coração budista expressa a verdade física: as formas materiais nascem da vacuidade fundamental e a ela retornam sem cessar."]], "conceitos": [["Campo Quântico", "O substrato energético universal contínuo que preenche todo o espaço e engendra a matéria."], ["Vácuo Quântico", "O estado de menor energia de um campo, caracterizado por intensa atividade de criação e destruição espontânea."], ["Partículas Virtuais", "Flashes efêmeros de matéria e antimatéria que surgem do vácuo e se aniquilam em intervalos subatômicos."], ["Sunyata", "A vacuidade fundamental e fértil de onde brotam todas as formas fenomênicas do cosmos."]], "takeaways": ["A física quântica aboliu a separação clássica entre espaço vazio e matéria sólida.", "A matéria é uma condensação efêmera do campo quântico universal.", "O Vácuo Quântico e o Sunyata oriental designam a mesma realidade: o vazio primordial prenhe de potencialidades criativas.", "Todas as formas materiais são manifestações transitórias de uma matriz energética subjacente e contínua."], "anti": ["Vácuo como Nada Inerte: Conceber o vácuo como um espaço geométrico vazio, estéril e privado de toda e qualquer atividade física.", "Isolamento da Matéria: Tratar partículas subatômicas como entidades autocontidas e desconectadas do campo cósmico que as engendra."]}, {"num": "XV", "titulo": "A Dança Cósmica", "parte": "Parte III · Os Paralelos", "core": "Nos laboratórios de altas energias e nas câmaras de bolhas, a matéria se revela como uma coreografia perpétua de criação, colisão e aniquilação — uma dança cósmica incessante que encontra sua expressão mitológica e poética perfeita na dança de Shiva Nataraja.", "frameworks": [["A Coreografia Subatômica", "A física de altas energias demonstra que as partículas subatômicas nascem de colisões energéticas e decaem em frações infinitesimais de segundo, num balé rítmico perene."], ["O Simbolismo Cósmico de Shiva Nataraja", "A dança de Shiva no círculo de chamas representa os cinco ritmos cósmicos: criação (Srishti), preservação (Sthiti), dissolução (Samhara), ocultação (Tirobhava) e libertação (Anugraha)."], ["Câmaras de Bolhas como Telas da Dança", "As trajetórias curvilíneas fotografadas em detectores de partículas são as pegadas visíveis e os registros coreográficos da dança cósmica invisível da matéria."]], "conceitos": [["Shiva Nataraja", "O Senhor da Dança cósmica hindu, síntese visual e espiritual do dinamismo perpétuo do universo."], ["Criação e Aniquilação de Pares", "O processo relativístico em que energia se converte em matéria e antimatéria e vice-versa."], ["Câmara de Bolhas", "Instrumento de detecção física que registra as trilhas de partículas subatômicas em colisão."], ["Ritmo Cósmico", "A pulsação universal presente desde as interações de partículas elementares até a evolução das galáxias."]], "takeaways": ["A criação e a aniquilação são processos contínuos e inseparáveis no coração de toda a matéria física.", "A arte sagrada hindu capturou com assombrosa precisão intuitiva as verdades descobertas pela física nuclear.", "O universo é uma celebração dinâmica onde cada partícula é simultaneamente dançarina e dança.", "A morte e a dissolução de formas são pré-requisitos vitais para o nascimento de novas configurações cósmicas."], "anti": ["Fixismo Estrutural: Acreditar que a conservação da matéria exige a permanência das partículas individuais.", "Desprezo pela Linguagem Mítica: Subestimar a potência das metáforas e imagens místico-artísticas para sintetizar fenômenos físicos de alta complexidade."]}, {"num": "XVI", "titulo": "Simetrias da Matéria", "parte": "Parte III · Os Paralelos", "core": "A proliferação de partículas nos aceleradores encontrou ordem racional através de simetrias abstratas (modelo de quarks, grupos de Lie como SU(3) e o 'Caminho Óctuplo'), espelhando os sistemas combinatórios orientais como os hexagramas do I Ching.", "frameworks": [["Simetrias e Leis de Conservação (Teorema de Noether)", "A cada simetria contínua fundamental das leis da natureza corresponde uma grandeza física conservada (energia, momento, carga elétrica)."], ["O Caminho Óctuplo e o Modelo de Quarks", "Murray Gell-Mann batizou a simetria SU(3) dos hádrons de 'Caminho Óctuplo' em reverência à tradição budista, revelando a harmonia interna oculta no zoológico de partículas."], ["Simetrias Algébricas do I Ching", "A matriz de 64 hexagramas do I Ching opera como uma álgebra arquetípica de simetrias dinâmicas e transições de fase no cosmos."]], "conceitos": [["Quarks", "Os constituintes fundamentais fracionários dos hádrons, ligados pela força forte e pelo confinamento dinâmico."], ["Grupo de Simetria SU(3)", "Estrutura matemática que unifica e classifica os mésons e bárions em padrões geométricos elegantes."], ["Caminho Óctuplo (Física)", "A classificação dos hádrons em octetos e decupletes com base em simetrias internas de sabor e carga."], ["Invariância de Gauge", "O princípio matemático segundo o qual as equações da física permanecem inalteradas sob transformações locais."]], "takeaways": ["A aparente complexidade e multiplicidade do mundo subatômico repousa sobre simetrias matemáticas profundas.", "Simetria na física quântica é uma propriedade dinâmica de transformação, não um desenho geométrico estático.", "Tanto os físicos teóricos quanto os sábios do I Ching utilizaram matrizes simétricas para ordenar o fluxo das aparências.", "As leis da conservação são as âncoras invariantes em um universo em perpétua metamorfose."], "anti": ["Atomismo Isolacionista: Buscar quarks como objetos livres e isoláveis fora dos campos de força que os confinam.", "Simetria Estática: Confundir as simetrias dinâmicas da mecânica quântica com proporções geométricas estáticas e rígidas."]}, {"num": "XVII", "titulo": "Padrões de Mutação", "parte": "Parte III · Os Paralelos", "core": "A evolução da física das partículas para a física dos processos: os Diagramas de Feynman e a Teoria da Matriz S (S-Matrix) descrevem a realidade não como substâncias fixas, mas como probabilidades de reação, canais de colisão e padrões de mutação contínua.", "frameworks": [["Diagramas de Feynman e Simetria Temporal", "Os diagramas de Feynman representam interações de partículas no espaço-tempo onde antipartículas equivalem matematicamente a partículas viajando para trás no tempo."], ["A Teoria da Matriz S (Scattering Matrix)", "Abandona a descrição microscópica detalhada em favor do cálculo das probabilidades de transição entre estados iniciais e finais de colisão de hádrons."], ["Padrões de Mutação Contínua", "Assim como no I Ching, o cosmos subatômico não é povoado por 'coisas que sofrem mudanças', mas sim constituído por processos de mudança que geram padrões momentâneos."]], "conceitos": [["Diagrama de Feynman", "Representação gráfica e ferramenta computacional para calcular amplitudes de transição quântica."], ["Matriz S", "Operador matemático fundamental que relaciona os estados de entrada e saída em colisões de partículas."], ["Canal Cruzado (Crossing Symmetry)", "Propriedade relativística que une reações de partículas e antipartículas em diferentes direções do espaço-tempo."], ["Probabilidade de Transição", "A medida estatística que determina a taxa de ocorrência de uma determinada reação quântica."]], "takeaways": ["No domínio subatômico, a distinção entre ator e ação desaparece: a partícula é o próprio processo de interação.", "Diagramas de Feynman tratam espaço e tempo com simetria perfeita, superando a flecha temporal ingênua.", "A física de altas energias é uma ciência de mutações e probabilidades, não de corpos estáticos e certezas mecânicas.", "A realidade física é uma rede aberta de eventos e transições perpétuas."], "anti": ["Causalidade Mecânica Linear: Tentar traçar trajetórias contínuas e determinísticas para partículas durante colisões de alta energia.", "Projeção Temporal Clássica: Exigir que as interações subatômicas fundamentais respeitem a assimetria psicológica do tempo macroscópico."]}, {"num": "XVIII", "titulo": "Interpenetração", "parte": "Parte III · Os Paralelos", "core": "A Teoria do Bootstrap de Geoffrey Chew postula que a natureza é uma rede auto-consistente sem entidades fundamentais — cada partícula contém todas as outras. É a tradução matemática precisa da Rede de Joias de Indra do Budismo Mahayana (Avatamsaka Sutra), onde cada nó reflete toda a teia cósmica.", "frameworks": [["A Teoria do Bootstrap ('Puxar-se pelas Botas')", "A natureza não possui tijolos fundamentais ou leis axiomáticas arbitrárias; cada partícula subatômica existe através da auto-consistência mútua de todas as interações do cosmos."], ["A Rede de Joias de Indra (Avatamsaka Sutra)", "A metáfora budista suprema da interpenetração: uma rede infinita com uma joia em cada nó que reflete todas as outras joias da rede e suas infinitas reflexões mútuas."], ["Auto-Consistência e Holografia Cósmica", "Cada elemento do cosmos é simultaneamente causa e efeito, continente e conteúdo; a estrutura do todo reside codificada em cada fragmento da teia universal."]], "conceitos": [["Hipótese Bootstrap", "A proposta de que as leis da física decorrem unicamente da exigência de auto-consistência lógica global."], ["Rede de Indra", "O modelo visionário budista da interconexão holográfica e da reflexão mútua universal."], ["Avatamsaka Sutra", "A escritura magna do Mahayana dedicada a descrever a harmonia cósmica e a interpenetração dos Dharmas."], ["Dharmadhatu", "O reino da realidade suprema, caracterizado pela perfeita interdependência e transparência mútua de todas as coisas."]], "takeaways": ["A busca secular por um 'bloco fundamental indivisível' de matéria é uma ilusão superada pelo princípio do Bootstrap.", "O universo é uma totalidade auto-sustentada onde nenhuma parte é mais básica ou primária do que as outras.", "A teoria do Bootstrap e a Rede de Indra representam a síntese máxima da convergência entre a física de ponta e a mística oriental.", "Compreender a interpenetração universal é o fundamento para uma ética planetária de reverência à vida."], "anti": ["Reducionismo Fundamentalista: Persistir na obsessão mecanicista de que o universo precisa de um constituinte básico indivisível ('tijolo final').", "Fragmentação Holográfica: Tentar explicar um fenômeno complexo isolando-o de sua rede cósmica de mútua sustentação e consistência."]}];
+const GLOSSARY = [["Anatta", "Doutrina budista do não-eu; a constatação de que não existe uma alma substancial, imutável ou separada.", "VI"], ["Anitya", "A impermanência universal no Budismo; a verdade ontológica de que todas as formas estão em fluxo perpétuo.", "VI"], ["Atman", "A essência espiritual mais profunda e a consciência individual no Hinduísmo, idêntica a Brahman.", "V"], ["Avidya", "A ignorância espiritual que confunde as ilusões transitórias de Maya com a realidade última.", "V"], ["Avatamsaka Sutra", "Escritura magna do Budismo Mahayana que descreve a Rede de Indra e a interpenetração de todos os fenômenos.", "XVIII"], ["Brahman", "A realidade última, infinita, inefável e onipresente que sustenta todo o cosmos no pensamento védico e hindu.", "V"], ["Bootstrap (Física)", "Teoria formulada por Geoffrey Chew segundo a qual a natureza não tem blocos fundamentais, sendo auto-consistente.", "XVIII"], ["Câmara de Bolhas", "Detector experimental que fotografa as trajetórias curvilíneas e as transformações de partículas atômicas.", "XV"], ["Caminho Óctuplo (Budismo)", "O nobre caminho de oito passos ensinado por Buda para a cessação definitiva de Dukkha.", "VI"], ["Caminho Óctuplo (Física)", "Classificação de hádrons em octetos proposta por Gell-Mann baseada no grupo de simetria SU(3).", "XVI"], ["Canal Cruzado (Crossing)", "Simetria relativística na Matriz S que relaciona processos de partículas e antipartículas em direções temporais opostas.", "XVII"], ["Chi (Qi)", "A energia vital universal e o sopro cósmico que flui através de todas as coisas na filosofia chinesa.", "VII"], ["Cisão Cartesiana", "A separação dualista formulada por Descartes entre a mente pensante (res cogitans) e a matéria mecânica (res extensa).", "I"], ["Coincidentia Oppositorum", "A harmonia e síntese subjacente que une e transcende todos os pares de opostos na realidade suprema.", "XI"], ["Complementaridade", "Princípio formulado por Niels Bohr segundo o qual descrições excludentes (onda/partícula) são complementares.", "XI"], ["Contraria Sunt Complementa", "Lema adotado por Niels Bohr em seu brasão oficial, afirmando que os opostos se completam harmoniosamente.", "XI"], ["Damaru", "O tambor de duas faces na mão direita de Shiva Nataraja, cujo som rítmico simboliza o pulso criador do cosmos.", "XV"], ["Darshana", "A visão ou experiência contemplativa direta da realidade última nas tradições espirituais indianas.", "II"], ["Dharmadhatu", "O reino da realidade cósmica suprema no Budismo Mahayana, onde todas as coisas se interpenetram livremente.", "XVIII"], ["Dharmas", "As unidades elementares de eventos e processos momentâneos que constituem o fluxo da experiência no Budismo.", "VI"], ["Diagrama de Feynman", "Representação gráfica do espaço-tempo que calcula as interações e probabilidades de espalhamento quântico.", "XVII"], ["Dilatação Temporal", "Efeito relativístico comprovado em que o tempo transcorre mais lentamente para corpos em movimento ou campos gravitacionais.", "XII"], ["Dualidade Onda-Partícula", "A manifestação da matéria e da radiação como ondas contínuas ou partículas pontuais conforme o experimento.", "XI"], ["Dukkha", "A frustração, dor e insatisfação existencial decorrentes do apego humano a formas inerentemente impermanentes.", "VI"], ["Emaranhamento Quântico", "Fenômeno em que partículas correlacionadas mantêm conexões instantâneas e não-locais independentemente da distância.", "X"], ["Energia de Ponto Zero", "A energia vibratória mínima que persiste em qualquer sistema quântico mesmo no zero absoluto de temperatura.", "XIII"], ["Equivalência Massa-Energia", "A célebre equação de Einstein (E = mc²) que estabelece a identidade física entre matéria e energia concentrada.", "XIII"], ["Espaço-Tempo de Minkowski", "O contínuo geométrico de quatro dimensões que unifica o espaço tridimensional e o tempo na relatividade.", "XII"], ["Função de Onda (Ψ)", "Expressão matemática na mecânica quântica que descreve as ondas de probabilidade de um sistema físico.", "IV"], ["Geodésica", "A trajetória mais econômica e natural que uma partícula ou raio de luz percorre no espaço-tempo curvo.", "XII"], ["Hexagramas do I Ching", "Conjunto de 64 figuras de seis linhas que mapeiam as configurações arquetípicas das mutações cósmicas.", "VII"], ["Holismo Quântico", "A propriedade fundamental segundo a qual o estado do sistema global não se reduz à soma de suas partes isoladas.", "X"], ["I Ching", "O Livro das Mutações; clássico chinês que descreve a dinâmica universal da alternância entre repouso e movimento.", "VII"], ["Incerteza de Heisenberg", "Princípio físico que postula o limite intrínseco na precisão simultânea de posição e momento (Δx · Δp ≥ ℏ/2).", "IV"], ["Inseparabilidade Quântica", "A impossibilidade de decompor o universo subatômico em subsistemas totalmente independentes.", "X"], ["Interpenetração", "O princípio místico e físico segundo o qual cada elemento do cosmos contém e reflete todos os demais.", "XVIII"], ["Karma", "A lei dinâmica de causa e efeito moral e natural que conecta todas as ações e consequências no universo.", "V"], ["Kensho", "O vislumbre inicial e direto da natureza essencial de Buda presente em cada ser humano no Zen.", "IX"], ["Koan", "Problema ou diálogo paradoxal no Zen concebido para paralisar a mente discursiva e propiciar o Satori.", "III"], ["Lila", "O jogo cósmico divino e a peça teatral sagrada pela qual Brahman se manifesta espontaneamente na multiplicidade.", "V"], ["Matriz S (S-Matrix)", "Operador matemático que calcula as probabilidades de transição e colisão entre partículas atômicas livres.", "XVII"], ["Maya", "A ilusão criativa que faz a unidade indiferenciada de Brahman parecer uma multiplicidade de objetos fragmentados.", "V"], ["Mecanicismo", "Doutrina clássica que concebe o universo como uma máquina determinista composta de blocos materiais rígidos.", "I"], ["Moksha", "A libertação espiritual suprema da roda de renascimentos através da união consciente com Brahman.", "V"], ["Mondo", "Diálogo rápido e espontâneo entre mestre e discípulo zen para romper amarras conceituais e lógicas.", "IX"], ["Não-Localidade", "A característica da mecânica quântica em que ações distantes influenciam instantaneamente outros subsistemas.", "X"], ["Nirvana", "A extinção definitiva das ilusões do ego e do apego, resultando em paz incondicionada e liberdade espiritual.", "VI"], ["Nunc Stans (Eterno Agora)", "A experiência contemplativa atemporal onde o passado, presente e futuro coexistem na consciência pura.", "XII"], ["Observador-Participante", "Conceito de John Wheeler que reconhece o experimentador como co-criador dos atributos físicos medidos.", "X"], ["Partículas Virtuais", "Flutuações quânticas instantâneas de energia que emergem do vácuo e se aniquilam em frações de segundo.", "XIV"], ["Pratītyasamutpāda", "A origem interdependente e co-surgimento causal de todos os fenômenos no Budismo.", "VI"], ["Quanta de Energia", "Pacotes mínimos e discretos de energia emitidos ou absorvidos pela radiação eletromagnética (Max Planck).", "IV"], ["Quarks", "Partículas fundamentais fracionárias que compõem os hádrons (como prótons e nêutrons), confinadas por força forte.", "XVI"], ["Rede de Indra", "Metáfora budista de uma rede cósmica infinita de joias reflexivas que ilustra a interpenetração universal.", "XVIII"], ["Samsara", "O ciclo incessante de nascimento, sofrimento, morte e renascimento no mundo dos fenômenos condicionados.", "V"], ["Satori", "O despertar espiritual súbito e intuitivo para a verdadeira natureza da realidade na tradição Zen.", "IX"], ["Shiva Nataraja", "A manifestação do Senhor da Dança cósmica hindu que executa o ritmo eterno de criação e destruição do cosmos.", "XV"], ["Simetria SU(3)", "Grupo matemático de Lie que organiza os hádrons e quarks em matrizes de simetria geométrica de sabor e cor.", "XVI"], ["Sunyata", "A vacuidade ontológica de existência própria e independente, fonte fértil de todas as formas no Budismo.", "VI"], ["Tao", "O caminho supremo, a ordem inefável e o fluxo imanente que sustenta e rege todas as coisas na cosmologia chinesa.", "VIII"], ["Tathata", "A 'talidade' ou a realidade das coisas exatamente como são, sem as projeções de categorias conceituais.", "VI"], ["Te", "A potência intrínseca, poder espiritual e virtude natural de um ser que age em perfeita harmonia com o Tao.", "VIII"], ["Teoria Quântica de Campos", "Quadro teórico que unifica a relatividade e a quântica, tratando a matéria como excitações de campos contínuos.", "XIV"], ["Tzu-jan", "A espontaneidade, auto-geração e naturalidade intrínsecas ao funcionamento de todo o cosmos no Taoísmo.", "VIII"], ["Vácuo Quântico", "O estado fundamental de energia mínima na teoria de campos, pulsando com criação contínua de pares virtuais.", "XIV"], ["Wu Wei", "A não-ação artificial; a prática taoísta da ação espontânea e desprovida de esforço voluntarista egoico.", "VIII"], ["Yang", "O princípio cósmico ativo, luminoso, masculino, criador, quente e expansivo da filosofia oriental.", "VII"], ["Yin", "O princípio cósmico receptivo, escuro, feminino, acolhedor, frio e contrativo da filosofia oriental.", "VII"], ["Zazen", "A meditação sentada silenciosa praticada no Zen como realização direta da natureza de Buda.", "IX"]];
+const RULES = [["Fenômeno atômico exibe comportamento de onda ou corpúsculo", "Adote o Princípio da Complementaridade (Bohr)", "Ambas as descrições são mutuamente exclusivas num só aparato, mas necessárias para esgotar o fenômeno.", "XI"], ["Cálculo determinístico clássico falha na escala subatômica", "Aplique o Princípio da Incerteza de Heisenberg", "Posição e momento não possuem valores simultâneos precisos na matéria quântica (Δx · Δp ≥ ℏ/2).", "IV"], ["Avaliação do impacto do experimentador no fenômeno medido", "Modele como Observador-Participante (Wheeler)", "O arranjo experimental escolhido colapsa a função de onda e determina qual propriedade se manifesta.", "X"], ["Investigação sobre a natureza do espaço vazio", "Trate o Vácuo como Campo Quântico Dinâmico", "O vácuo é um vazio fértil (Sunyata), preenchido por flutuações e criação perpétua de partículas virtuais.", "XIV"], ["Tentativa de localizar o 'bloco fundamental' de matéria", "Substitua a busca pelo Modelo Bootstrap (Chew)", "Nenhuma partícula é elementar; cada componente decorre da auto-consistência de todas as interações da rede.", "XVIII"], ["Análise de trajetórias e movimentos em altas velocidades", "Integre espaço e tempo no Contínuo de Minkowski", "Espaço e tempo são grandezas relativas e coordenadas unificadas de quatro dimensões (s² = c²t² - r²).", "XII"], ["Classificação do zoológico de novas partículas subatômicas", "Aplique Matrizes de Simetria de Gauge e SU(3)", "A multiplicidade fenomênica repousa sobre simetrias matemáticas abstratas (Caminho Óctuplo de Gell-Mann).", "XVI"], ["Equilíbrio de forças e processos em sistemas complexos", "Mapeie a dinâmica polar de alternância Yin-Yang", "Polos opostos não são inimigos, mas forças complementares que se transformam ciclicamente uma na outra.", "VII"], ["Intervenção estratégica em ecossistemas ou organizações", "Pratique a ação espontânea e flexível Wu Wei", "Alinhe a ação aos vetores naturais de força existentes no sistema em vez de impor coerção mecânica rígida.", "VIII"], ["Dificuldade de descrever o microcosmo na linguagem verbal", "Empregue a Heurística do Paradoxo (Koan Epistêmico)", "O paradoxo sinaliza que o intelecto atingiu o teto da lógica binária e exige um salto de paradigma.", "III"], ["Análise de interações e colisões de altas energias", "Utilize a Matriz S e Diagramas de Feynman", "Descreva processos de transição e probabilidades no espaço-tempo em vez de trajetórias mecanicistas fixas.", "XVII"], ["Dispersão e correlação instantânea em sistemas distribuídos", "Considere o Holismo e a Não-Localidade Quântica", "Sistemas correlacionados mantêm conexão holística instantânea, superando a separabilidade clássica.", "X"], ["Equacionamento de transformações entre matéria e radiação", "Aplique a Equivalência Massa-Energia (E = mc²)", "A matéria é energia concentrada em repouso dinâmico; partículas são padrões oscilatórios de energia pura.", "XIII"], ["Avaliação da relação entre a parte e o sistema global", "Adote o Modelo Holográfico da Rede de Indra", "Cada nó da teia reflete e contém a estrutura do todo através da interpenetração mútua universal.", "XVIII"]];
+const DUALIDADES = [["Matéria vs. Vazio", "A matéria é apenas uma excitação localizada do campo contínuo; o vácuo quântico pulsa com potencial criativo inesgotável.", "Brahman e Sunyata: as formas nascem do vazio cósmico e a ele retornam; 'A forma é vazio, o vazio é forma'.", "O Vazio Fértil"], ["Onda vs. Partícula", "A radiação e a matéria exibem facetas contínuas ou discretas dependendo do arranjo de medição (Complementaridade de Bohr).", "Yin e Yang: aspectos polares complementares de uma mesma realidade cósmica indivisível.", "A Complementaridade"], ["Sujeito vs. Objeto", "O experimentador não é espectador passivo, mas participante ativo na definição dos estados observados no laboratório.", "Tat Tvam Asi e a não-dualidade: a mente individual (Atman) e a realidade cósmica (Brahman) são una.", "O Observador-Participante"], ["Espaço vs. Tempo", "Unificados no contínuo quadridimensional relativístico de Minkowski-Einstein; o tempo é flexível e relativo.", "O Eterno Agora (Nunc Stans): dissolução da linearidade temporal na presença meditativa desperta.", "O Contínuo Dinâmico"], ["Repouso vs. Movimento", "O repouso absoluto não existe; a matéria subatômica é pura inquietação e oscilação quântica perpétua de ponto zero.", "A Dança de Shiva Nataraja: o cosmos está em estado ininterrupto de criação, vibração e dissolução.", "O Universo Dinâmico"], ["Causa vs. Efeito", "Na teoria do Bootstrap e na simetria temporal de Feynman, as partículas são simultaneamente causas e efeitos mútuos.", "Pratityasamutpada (origem co-dependente): todos os fenômenos surgem em mútua interdependência simultânea.", "A Rede Auto-Consistente"], ["Estrutura vs. Processo", "As entidades atômicas não são 'coisas fixas', mas eventos, transições de energia e probabilidades na Matriz S.", "O I Ching e o Taoísmo: a essência do mundo não reside em substâncias, mas nos padrões de mutação perene.", "A Primazia do Devir"], ["Razão vs. Intuição", "A física teórica formula mapas conceituais matemáticos rigorosos e reconhece seus limites epistemológicos.", "A experiência direta (Darshana / Satori) atinge o território vivo além dos filtros da linguagem discursiva.", "A Sabedoria Integrada"]];
+const TELLS = [["Tratar partículas atômicas como bolinhas sólidas de bilhar", "Recaída no mecanicismo newtoniano; ignora a teoria quântica de campos e a dualidade onda-partícula.", "I"], ["Buscar obsessivamente o 'tijolo fundamental' indivisível do cosmos", "Reducionismo ingênuo superado pela hipótese Bootstrap e pela interpenetração da Rede de Indra.", "XVIII"], ["Assumir que o tempo flui universalmente de forma absoluta e independente", "Violação da Teoria da Relatividade de Einstein; ignora o contínuo quadridimensional do espaço-tempo.", "XII"], ["Conceber o vácuo como um espaço geométrico inerte e totalmente vazio", "Erro clássico; desconhece o vácuo quântico gerador de matéria e a vacuidade fértil (Sunyata).", "XIV"], ["Exigir lógica binária aristotélica rígida para descrever o átomo", "Incompreensão da complementaridade quântica e da necessidade do paradoxo heurístico (Koan).", "III"], ["Imaginar o cientista como um observador externo desvinculado do fenômeno", "Ilusão de neutralidade clássica; a medição quântica exige o modelo do observador-participante.", "X"], ["Confundir o modelo matemático abstrato com a realidade concreta", "Erro do 'Mapa vs. Território'; reificação epistemológica de formulações teóricas aproximadas.", "II"], ["Interpretar a polaridade Yin-Yang como combate maniqueísta entre Bem e Mal", "Distorção ocidental; Yin e Yang são polos complementares e interdependentes de harmonia rítmica.", "VII"], ["Forçar resultados em sistemas complexos por controle e coerção rígida", "Violação do princípio taoísta de Wu Wei; gera atrito, desequilíbrio e colapso no sistema.", "VIII"], ["Concluir que Sunyata budista é um niilismo do nada e do desespero", "Confusão entre vacuidade de substância intrínseca e aniquilação estéril da realidade.", "VI"], ["Descartar mitos e símbolos poéticos como crendices sem valor explicativo", "Preconceito cientificista; imagens arquetípicas como Shiva Nataraja sintetizam dinâmicas profundas.", "XV"], ["Acreditar em trajetórias deterministas fechadas no choque de partículas", "Ignora a natureza probabilística da Matriz S e os diagramas simétricos no espaço-tempo.", "XVII"]];
+const PATTERNS = [["Princípio da Complementaridade de Bohr", "Quando confrontado com aspectos aparentemente contraditórios ou mutuamente excludentes de um mesmo fenômeno.", "Reconheça que ambas as perspectivas (como onda contínua e partícula discreta) são necessárias para esgotar o conteúdo do fenômeno real. Em vez de forçar uma escolha binária, mapeie o contexto experimental e situacional que faz emergir cada uma das facetas complementares.", "Exige o abandono de descrições mecanicistas unívocas; requer clareza absoluta sobre as fronteiras do contexto de observação.", "XI"], ["Modelo do Observador-Participante", "Para analisar sistemas dinâmicos onde o próprio ato de pesquisar, medir ou auditar afeta o comportamento do sistema.", "Abandone a ilusão do espectador neutro. Trate o analista e o arranjo de medição como componentes ativos do sistema global, calculando o impacto relacional das perguntas formuladas sobre o colapso dos estados observados.", "Elimina a presunção de distanciamento estéril; impõe rigor ético e responsabilidade metodológica contínua.", "X"], ["Hipótese do Bootstrap (Auto-Consistência)", "Ao modelar redes complexas onde não existem componentes primários, centros hierárquicos ou entidades fundamentais.", "Modele cada componente da rede como sendo gerado e sustentado pela consistência mútua de todas as interações do conjunto. Elimine a premissa de um 'bloco elementar' isolado e explique a estabilidade através do equilíbrio da rede.", "Aumenta a complexidade analítica ao exigir visão sistêmica; elimina a simplicidade de explicações lineares de causa única.", "XVIII"], ["Dinâmica Polar Yin-Yang", "Ao gerenciar ciclos de transição, expansão/retração, estresse/recuperação e sustentabilidade em sistemas vivos e humanos.", "Identifique os polos receptivo (Yin) e ativo (Yang). Mapeie a alternância rítmica entre ambos, evitando a hipertrofia unilateral de um único extremo (como o ativismo febril sem reflexão), que inevitavelmente precipita a crise do sistema.", "Impede o apego a estratégias unilaterais de crescimento infinito; demanda sensibilidade para reconhecer os pontos de virada.", "VII"], ["O Vazio Fértil (Sunyata / Campo Quântico)", "Para compreender a gênese de inovações, transições de fase e a dinâmica entre estabilidade e emergência de novas estruturas.", "Em vez de focar exclusivamente nos objetos e entidades manifestas, examine a matriz subjacente e o espaço de potencialidades (o campo) de onde as formas emergem como excitações temporárias de energia concentrada.", "Exige alto grau de abstração; requer desprender-se da fixação exclusiva em estruturas e monumentos visíveis.", "XIV"], ["Dança Cósmica de Criação e Aniquilação", "Ao lidar com processos de obsolescência, transformação veloz e reestruturação profunda em ambientes dinâmicos.", "Compreenda a destruição, o decaimento e a reciclagem de velhas formas não como falhas anômalas, mas como etapas indispensáveis para a liberação de energia e a criação de novas configurações viáveis (o ritmo de Shiva Nataraja).", "Demanda tolerância à impermanência existencial; desfaz a ilusão de segurança e controle patrimonial permanente.", "XV"], ["A Rede de Indra (Interpenetração Holográfica)", "Para planejar intervenções em sistemas distribuídos de alta densidade informacional e interdependência institucional.", "Considere que cada nó da rede reflete a totalidade do sistema. Qualquer intervenção local gera reverberações holográficas em toda a teia. Otimize os nós locais garantindo que comuniquem a coerência e os valores do todo.", "Elimina o isolamento de feudos e setores; requer alinhamento sistêmico e comunicação cristalina em tempo real.", "XVIII"], ["Distinção Epistemológica Mapa vs. Território", "Ao formular leis, diretrizes regulatórias, códigos de conduta ou modelos matemáticos de simulação.", "Mantenha distinção explícita entre a formulação simbólica/verbal (o mapa) e a experiência fática viva em fluxo (o território). Atualize periodicamente os modelos para evitar o aprisionamento intelectual em dogmas ultrapassados.", "Previne o dogmatismo doutrinário; exige humildade intelectual e prontidão para revisar postulados conceituais.", "II"], ["Heurística do Paradoxo (Koan Epistemológico)", "Ao deparar-se com impasses teóricos ou contradições regulatórias insolúveis sob a lógica formal convencional.", "Utilize o paradoxo não como sinal de erro a ser mascarado, mas como indicador de que o modelo mental atingiu seu limite de validade. Use a tensão do paradoxo para forçar um salto epistemológico para um nível conceitual superior.", "Pode gerar desconforto e insegurança temporária na equipe; exige coragem intelectual para transcender certezas prévias.", "III"], ["Ação Espontânea Não-Coercitiva (Wu Wei)", "Para conduzir processos de negociação, liderança e resolução de conflitos em ambientes complexos e sensíveis.", "Identifique as inclinações naturais, os fluxos de motivação e os vetores de força já presentes nas partes envolvidas. Conduza o processo com a maleabilidade da água, contornando a rigidez e permitindo que a solução desabroche espontaneamente.", "Exige paciência, observação refinada e renúncia ao voluntarismo autoritário e ao exibicionismo de poder.", "VIII"], ["Geometrização do Contínuo Espaço-Tempo", "Ao analisar a evolução histórica, a sustentabilidade e a trajetória de longo prazo de projetos e instituições.", "Integre a coordenada temporal diretamente à morfologia dos processos, tratando estruturas organizacionais não como prédios estáticos no espaço, mas como eventos em contínuo movimento e deformação no espaço-tempo.", "Supera o imediatismo de curto prazo; demanda capacidade de análise prospectiva e cálculo de trajetórias dinâmicas.", "XII"], ["Classificação por Simetrias Dinâmicas", "Para estruturar e organizar grandes massas de dados, normas ou eventos aparentemente caóticos e dispersos.", "Procure as leis de conservação e os princípios invariantes subjacentes para agrupar fenômenos em matrizes geométricas de simetria (como o Caminho Óctuplo ou os hexagramas do I Ching), preservando a coerência do conjunto.", "Evita a armadilha do reducionismo empobrecedor; revela harmonia e elegância ocultas sob a multiplicidade aparente.", "XVI"]];
+
+/* ===== NAVEGAÇÃO DA SIDEBAR ===== */
+const NAV = [
+  {id:"overview", label:"Visão Geral", num:"§", sub:"arquitetura da obra"},
+  {id:"chapters", label:"Capítulos", num:"I–XVIII", sub:"os 18 capítulos"},
+  {id:"glossary", label:"Glossário", num:"A–Z", sub:"69 termos chave"},
+  {id:"cheatsheet", label:"Cheatsheet", num:"→", sub:"regras e dualidades"},
+  {id:"patterns", label:"Padrões", num:"12", sub:"modelos de aplicação"}
+];
+
+function buildNav(){
+  const nav = document.getElementById("nav");
+  nav.innerHTML = NAV.map(n=>
+    `<button class="nav-item" data-sec="${n.id}" onclick="go('${n.id}')">
+      <span class="num">${n.num}</span>
+      <span>${n.label}<span class="sub">${n.sub}</span></span>
+    </button>`).join("");
+}
+
+function go(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  const target = document.getElementById("sec-"+id);
+  if(target) target.classList.add("active");
+  document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active", b.dataset.sec===id));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ===== TABELA DA ESTRUTURA (VISÃO GERAL) ===== */
+function renderEstrutura(){
+  const tbody = document.getElementById("tbl-estrutura");
+  tbody.innerHTML = CHAPTERS.map((c,i)=>
+    `<tr>
+      <td class="mono">${c.num}</td>
+      <td><b>${c.titulo}</b></td>
+      <td>${c.parte}</td>
+      <td>${c.frameworks.map(f=>f[0]).join(" · ")}</td>
+    </tr>`).join("");
+}
+
+/* ===== NAVEGAÇÃO DE CAPÍTULOS ===== */
+let curIdx = 0;
+function renderChapter(i){
+  if(i < 0 || i >= CHAPTERS.length) return;
+  curIdx = i;
+  const c = CHAPTERS[i];
+  const nav = document.getElementById("chapter-nav");
+  nav.innerHTML = `
+    <button class="pager-btn" onclick="renderChapter(${(i-1+CHAPTERS.length)%CHAPTERS.length})">← Anterior</button>
+    <span class="chapter-pos">${c.num} / XVIII — ${c.titulo}</span>
+    <button class="pager-btn" onclick="renderChapter(${(i+1)%CHAPTERS.length})">Próximo →</button>`;
+
+  const fw = c.frameworks.map(f=>`<div class="fw-item"><h4>${f[0]}</h4><p>${f[1]}</p></div>`).join("");
+  const conc = c.conceitos.map(k=>`<div class="concept"><div class="term">${k[0]}</div><div class="def">${k[1]}</div></div>`).join("");
+  const tk = c.takeaways.map(t=>`<div class="takeaway"><span class="tick">✓</span><p>${t}</p></div>`).join("");
+  const anti = c.anti.map(a=>`<div class="anti"><span class="warn">⚠</span><p>${a}</p></div>`).join("");
+
+  document.getElementById("chapter-view").innerHTML = `
+    <div class="chapter-hero" data-num="${c.num}">
+      <div class="parte">${c.parte}</div>
+      <h2>Capítulo ${c.num} — ${c.titulo}</h2>
+      <p class="core"><b>Ideia Central.</b> ${c.core}</p>
+    </div>
+    <div class="block"><div class="b-label">Frameworks e Modelos</div>${fw}</div>
+    <div class="block"><div class="b-label">Conceitos-Chave</div><div class="concept-grid">${conc}</div></div>
+    <div class="block"><div class="b-label">Pontos de Retenção</div>${tk}</div>
+    <div class="block"><div class="b-label">Anti-Padrões &amp; Armadilhas</div>${anti}</div>`;
+}
+
+/* ===== GLOSSÁRIO ===== */
+function renderGlossary(q){
+  q = (q||"").toLowerCase().trim();
+  const items = GLOSSARY.filter(g=>!q || g[0].toLowerCase().includes(q) || g[1].toLowerCase().includes(q));
+  document.getElementById("gloss-count").textContent = items.length + " de " + GLOSSARY.length + " termos disponíveis";
+  document.getElementById("gloss-list").innerHTML = items.map(g=>
+    `<div class="gloss-item">
+      <div class="term"><span>${g[0]}</span><span class="ch">CH ${g[2]}</span></div>
+      <div class="def">${g[1]}</div>
+    </div>`).join("");
+}
+
+/* ===== TABELAS CHEATSHEET ===== */
+function renderTables(){
+  document.getElementById("tbl-rules").innerHTML = RULES.map(r=>
+    `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td class="mono">CH ${r[3]}</td></tr>`).join("");
+  
+  document.getElementById("tbl-dualidades").innerHTML = DUALIDADES.map(d=>
+    `<tr><td><b>${d[0]}</b></td><td>${d[1]}</td><td>${d[2]}</td><td class="mono"><b>${d[3]}</b></td></tr>`).join("");
+  
+  document.getElementById("tbl-tells").innerHTML = TELLS.map(t=>
+    `<tr><td><b>${t[0]}</b></td><td>${t[1]}</td><td class="mono">CH ${t[2]}</td></tr>`).join("");
+}
+
+/* ===== PADRÕES ===== */
+function renderPatterns(){
+  document.getElementById("patterns-list").innerHTML = PATTERNS.map((p,i)=>
+    `<div class="pattern">
+      <div class="p-head">
+        <span class="p-num">${String(i+1).padStart(2,"0")}</span>
+        <h3>${p[0]}</h3>
+        <span class="ch">CH ${p[4]}</span>
+      </div>
+      <div class="p-use">Quando Usar — ${p[1]}</div>
+      <p>${p[2]}</p>
+      <div class="p-trade"><b>Trade-offs &amp; Cuidados.</b> ${p[3]}</div>
+    </div>`).join("");
+}
+
+/* ===== INICIALIZAÇÃO E ATALHOS ===== */
+document.addEventListener("DOMContentLoaded", ()=>{
+  buildNav();
+  go("overview");
+  renderEstrutura();
+  renderChapter(0);
+  renderGlossary("");
+  renderTables();
+  renderPatterns();
+
+  const searchInput = document.getElementById("gloss-input");
+  if(searchInput){
+    searchInput.addEventListener("input", e=>renderGlossary(e.target.value));
+  }
+
+  document.addEventListener("keydown", e=>{
+    if(e.key === "ArrowLeft" || e.key === "ArrowRight"){
+      if(document.activeElement && (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA")) return;
+      if(!document.getElementById("sec-chapters").classList.contains("active")) return;
+      if(e.key === "ArrowRight"){
+        renderChapter((curIdx + 1) % CHAPTERS.length);
+      } else {
+        renderChapter((curIdx - 1 + CHAPTERS.length) % CHAPTERS.length);
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>
